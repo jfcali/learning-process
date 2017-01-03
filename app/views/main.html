@@ -1,0 +1,25 @@
+<div class="container-fluid" ng-controller="MainCtrl" ng-init="init()">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Iteración <input type="number" min="0" ng-max="iterations.length" ng-model="currentIteration" ng-change="handleIterationChange()"></h1>
+    </div>
+    <div class="col-md-12">
+      <button ng-click="prevIteration()">Prev</button>
+      <button ng-click="playIteration()">{{play}}</button>
+      <button ng-click="nextIteration()">Next</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h1>Entrada</h1>
+      <h2>Semilla</h2>
+      <p>{{iterations[currentIteration].seed}}</p>
+    </div>
+    <div class="col-md-6">
+      <h1>Salida</h1>
+      <h2>Diversidad</h2>
+      <div ng-repeat="diversity in iterations[currentIteration].diversity">
+        <p>{{diversity.value}}: {{diversity.text}}</p>
+      </div>
+    </div>
+</div>
