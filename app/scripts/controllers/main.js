@@ -16,7 +16,8 @@ function Main($scope, $rootScope, $http, $q, $interval) {
   // ...
   $scope.init = function() {
   	console.log('init');
-  	$scope.getIterations();
+  	$scope.iterations;
+    $scope.getIterations();
   	$scope.currentIteration = 0;
   	$scope.play = 'Play';
   	$scope.isPlaying = false;
@@ -32,9 +33,10 @@ function Main($scope, $rootScope, $http, $q, $interval) {
   };
 
   $scope.handleIterationChange = function() {
-  	if($scope.currentIteration > $scope.iterations.length) {
-  		$scope.currentIteration = $scope.iterations.length;
+  	if($scope.currentIteration > $scope.iterations.length-1 || !$scope.currentIteration) {
+  		$scope.currentIteration = $scope.iterations.length-1;
   	}
+    //TODO: SHOW A MESSAGE WHEN LIMIT IS EXCEEDED I.E: THERE ARE ONLY 99 ITERATIONS!
     $scope.editMode = !$scope.editMode;
   };
 

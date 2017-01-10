@@ -8,7 +8,7 @@
         <input type="number" min="0" ng-max="iterations.length" ng-model="currentIteration" ng-change="handleIterationChange()" ng-model-options="{debounce:500}"  ng-show="editMode">
       </h1-->
       <h1>Iteración 
-        <input type="number" min="0" ng-max="iterations.length" ng-model="currentIteration" ng-change="handleIterationChange()">
+        <input type="number" min="0" max="99" ng-model="currentIteration" ng-change="handleIterationChange()">
       </h1>
     </div>
     <div class="col-md-12">
