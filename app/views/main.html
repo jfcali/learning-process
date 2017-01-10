@@ -1,17 +1,28 @@
 <div class="container-fluid" ng-controller="MainCtrl" ng-init="init()">
   <div class="row">
-    <div class="col-md-12">
-      <h1>Iteración <input type="number" min="0" ng-max="iterations.length" ng-model="currentIteration" ng-change="handleIterationChange()"></h1>
+    <div class="col-md-12 iteration-header">
+      <!--h1>Iteración 
+        <span ng-click="editMode=!editMode" ng-show="!editMode">
+          {{currentIteration}}
+        </span>
+        <input type="number" min="0" ng-max="iterations.length" ng-model="currentIteration" ng-change="handleIterationChange()" ng-model-options="{debounce:500}"  ng-show="editMode">
+      </h1-->
+      <h1>Iteración 
+        <input type="number" min="0" ng-max="iterations.length" ng-model="currentIteration" ng-change="handleIterationChange()">
+      </h1>
     </div>
     <div class="col-md-12">
-      <md-slider ng-model="currentIteration" min="0" max="100">
+      <md-slider ng-model="currentIteration" min="0" max="99">
       </md-slider>
     </div>
     <div class="col-md-4">
       <md-slider ng-model="speed" min="1" max="4" ng-change="updateSpeed()">
       </md-slider>
     </div>
-    <div class="col-md-12">
+    <div class="col-md-2">
+      {{dirtyMap(speed)}}
+    </div>
+    <div class="col-md-12 controls">
       <button ng-click="prevIteration()" ng-disabled = "isPlaying">Prev</button>
       <button ng-click="playIteration()">{{play}}</button>
       <button ng-click="nextIteration()" ng-disabled = "isPlaying">Next</button>

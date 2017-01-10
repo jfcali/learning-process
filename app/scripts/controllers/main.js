@@ -13,7 +13,6 @@ angular.module('frontNgApp')
 Main.$inject = ['$scope', '$rootScope', '$http', '$q', '$interval'];
 
 function Main($scope, $rootScope, $http, $q, $interval) {
-	var vm = this;
   // ...
   $scope.init = function() {
   	console.log('init');
@@ -22,12 +21,13 @@ function Main($scope, $rootScope, $http, $q, $interval) {
   	$scope.play = 'Play';
   	$scope.isPlaying = false;
     $scope.speed = 2;
+    $scope.editMode = false;
   };
 
   $scope.getIterations = function() {  	
   	$http.get('../../data/curet_02.json').then(function(res) {
   		$scope.iterations = res.data;
-  		console.log($scope.iterations);
+  		console.log($scope.iterations.length);
   	});
   };
 
@@ -35,6 +35,7 @@ function Main($scope, $rootScope, $http, $q, $interval) {
   	if($scope.currentIteration > $scope.iterations.length) {
   		$scope.currentIteration = $scope.iterations.length;
   	}
+    $scope.editMode = !$scope.editMode;
   };
 
   $scope.prevIteration = function() {
@@ -46,8 +47,8 @@ function Main($scope, $rootScope, $http, $q, $interval) {
 
   $scope.nextIteration = function() {
   	$scope.currentIteration++;
-  	if($scope.currentIteration > $scope.iterations.length) {
-  		$scope.currentIteration = $scope.iterations.length;
+  	if($scope.currentIteration > $scope.iterations.length-1) {
+  		$scope.currentIteration = $scope.iterations.length-1;
   	}
   };
 
