@@ -13,28 +13,31 @@ angular.module('frontNgApp')
 Main.$inject = ['$scope', '$rootScope', '$http', '$q', '$interval'];
 
 function Main($scope, $rootScope, $http, $q, $interval) {
-	var vm = this;
   // ...
   $scope.init = function() {
   	console.log('init');
-  	$scope.getIterations();
+  	$scope.iterations;
+    $scope.getIterations();
   	$scope.currentIteration = 0;
   	$scope.play = 'Play';
   	$scope.isPlaying = false;
+    $scope.speed = 2;
+    $scope.editMode = false;
   };
 
-  $scope.getIterations = function() {
-  	
+  $scope.getIterations = function() {  	
   	$http.get('../../data/curet_02.json').then(function(res) {
   		$scope.iterations = res.data;
-  		console.log($scope.iterations);
+  		console.log($scope.iterations.length);
   	});
   };
 
   $scope.handleIterationChange = function() {
-  	if($scope.currentIteration > $scope.iterations.length) {
-  		$scope.currentIteration = $scope.iterations.length;
+  	if($scope.currentIteration > $scope.iterations.length-1 || !$scope.currentIteration) {
+  		$scope.currentIteration = $scope.iterations.length-1;
   	}
+    //TODO: SHOW A MESSAGE WHEN LIMIT IS EXCEEDED I.E: THERE ARE ONLY 99 ITERATIONS!
+    $scope.editMode = !$scope.editMode;
   };
 
   $scope.prevIteration = function() {
@@ -46,10 +49,29 @@ function Main($scope, $rootScope, $http, $q, $interval) {
 
   $scope.nextIteration = function() {
   	$scope.currentIteration++;
-  	if($scope.currentIteration > $scope.iterations.length) {
-  		$scope.currentIteration = $scope.iterations.length;
+  	if($scope.currentIteration > $scope.iterations.length-1) {
+  		$scope.currentIteration = $scope.iterations.length-1;
   	}
   };
+
+  $scope.mapValueBetween = function(value, minRange1, maxRange1, minRange2, maxRange2) {
+    return minRange2 + (maxRange2 - minRange2) * (value - minRange1) / (maxRange1 - minRange1);
+  }
+
+  $scope.dirtyMap = function(value) {
+    if(value === 1) {
+      return 2000;
+    } 
+    if(value === 2) {
+      return 1000;
+    } 
+    if(value === 3) {
+      return 500;
+    } 
+    if(value === 4) {
+      return 250;
+    } 
+  }
 
   $scope.playIteration = function() {
   	$scope.isPlaying = !$scope.isPlaying;
@@ -59,19 +81,36 @@ function Main($scope, $rootScope, $http, $q, $interval) {
   	} else {
   		$scope.play = 'Pause';
 
-		$scope.stop = $interval(function() {
-			if ($scope.currentIteration < $scope.iterations.length) {
-				$scope.nextIteration();
-			} else {
-			    $scope.stopFight();
-			}
-		}, 1000);
+  		$scope.stop = $interval(function() {
+  			if ($scope.currentIteration < $scope.iterations.length) {
+  				$scope.nextIteration();
+  			} else {
+  			    $scope.stopFight();
+  			}
+  		}, $scope.dirtyMap($scope.speed));
+      console.log($scope.dirtyMap($scope.speed));
   	};
 
 
     $scope.stopFight = function() {
         $interval.cancel($scope.stop);
     };
+
+    $scope.updateSpeed = function() {
+      //$scope.playIteration();
+      if($scope.isPlaying) {
+        $interval.cancel($scope.stop);
+        $scope.stop = $interval(function() {
+          if ($scope.currentIteration < $scope.iterations.length) {
+            $scope.nextIteration();
+          } else {
+              $scope.stopFight();
+          }
+        }, $scope.dirtyMap($scope.speed));
+        console.log($scope.dirtyMap($scope.speed));
+      }
+
+    }
   };
 }
 
